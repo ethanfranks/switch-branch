@@ -87,17 +87,41 @@ declare -a branches=()
 
 if [ "$choice" -eq 0 ]
 	then
-		branches+=(`git branch`)
+		branches+=(`git branch` "*** new branch ***")
 	else
 		branches+=(`git branch --remote --list ${repos[$choice]}/*`)
 	fi
 
-branches+=("<--- back ---")
+# branches+=("<----- back ------")
 
 echo "\nSelect a branch to checkout:"
 
 select_option "${branches[@]}"
 branchChoice=$?
 
-echo "branchChoice index: $branchChoice"
-echo "value ${branches[$branchChoice]}"
+if [ "$choice" -eq 0 ]
+    then
+        if [ "${branches[$branchChoice]}" == "*** new branch ***" ]
+            then
+                echo "\nInsert a new branch name (cannot contain spaces):"
+                read branchName
+                echo "\n"
+                git checkout -b "$branchName"
+            # elif [ "${branches[$branchChoice]}" == "<----- back ------" ]
+            #     # logic here...
+            else
+                echo "\n"
+                git checkout ${branches[$branchChoice]}
+            fi
+    else
+        declare -a gitOptions=("fetch" "pull")
+        select_option "${gitOptions[@]}"
+        gitOptionChoice=$?
+            
+            if [ "$gitOptionChoice" == "fetch"]
+                then
+                    git fetch ${branches[$branchChoice]}
+                else
+                    git pull ${branches[$branchChoice]}
+                fi
+    fi
