@@ -1,14 +1,12 @@
 #!/bin/sh
-# Colors for echo output
+# colors for echo output
 CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
-# LRED='\033[1;31m'
 DCYAN='\033[38;5;24m'
 NC='\033[0m'
 
 strArr=(`git remote -v`)
 repos=(local)
-
 for i in "${!strArr[@]}"
 	do
 		var=${strArr[`expr $i + 2`]}
@@ -19,12 +17,12 @@ for i in "${!strArr[@]}"
 	done
 
 branches=()
-
 select_repo() {
+    # empty the array upon each call
     branches=()
 
     echo "${CYAN}Select repo:${NC}"
-    source ./select_option.sh 
+    source ~/./select_option.sh 
     select_option "${repos[@]}"
     choice=$?
 
