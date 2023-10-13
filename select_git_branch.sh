@@ -24,14 +24,17 @@ select_repo() {
 
     if [ "$choice" -eq 0 ]
     	then
-    		branches+=(`git branch` "*** new branch ***")
+            branchStr="`git branch`"
+            parsedBranchStr="${branchStr//\*/ }"
+    		branches+=($parsedBranchStr "*** new branch ***")
     	else
-    		branches+=(`git branch --remote --list ${repos[$choice]}/*`)
+            branchStr="`git branch --remote --list ${repos[$choice]}/*`"
+            branchStrArr=($branchStr)
+            parsedBranchStr="${branchStrArr[@]:3}"
+    		branches+=($parsedBranchStr)
     	fi
 
     branches+=("<----- back ------")
-
-    # BRANCHES NEED TO BE FILTERED FOR ACCURACY
     select_branch
 }
 
