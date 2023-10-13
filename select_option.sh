@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Renders a text based list of options that can be selected by the
 # user using up, down and enter keys and returns the chosen option.
 #
