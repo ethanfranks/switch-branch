@@ -97,17 +97,17 @@ select_repo() {
 
     if [ "$choice" -eq 0 ]
         # if user selects "local" repo add local branches to branches array
-    	  then
+    	then
             branchStr="`git branch`"
             parsedBranchStr="${branchStr//\*/ }"
-    		    branches+=($parsedBranchStr "${YELLOW}*** new branch ***${NC}")
-    	  # if user selects a remote repo add remote branches to branches array
+    		branches+=($parsedBranchStr "${YELLOW}*** new branch ***${NC}")
+    	# if user selects a remote repo add remote branches to branches array
         else
             branchStr="`git branch --remote --list ${repos[$choice]}/*`"
             branchStrArr=($branchStr)
             parsedBranchStr="${branchStrArr[@]:3}"
-    	  	  branches+=($parsedBranchStr)
-    	  fi
+    	  	branches+=($parsedBranchStr)
+    	fi
 
     branches+=("${DCYAN}<----- back ------${NC}")
     select_branch
@@ -119,48 +119,27 @@ select_branch() {
     select_option "${branches[@]}"
     branchChoice=$?
 
-    if [ "$choice" -eq 0 ]
-        # local repo control flow
+    if [ "${branches[$branchChoice]}" == "${DCYAN}<----- back ------${NC}" ]
         then
-            if [ "${branches[$branchChoice]}" == "${YELLOW}*** new branch ***${NC}" ]
-                then
-                    read -p "Insert new branch name (cannot contain spaces): " branchName
-                    echo
-                    git checkout -b "$branchName"
-                elif [ "${branches[$branchChoice]}" == "${DCYAN}<----- back ------${NC}" ]
-                    then
-                        select_repo
-                else
-                    echo
-                    git checkout ${branches[$branchChoice]}
-                fi
-        # remote repo control flow
-        else
-            if [ "${branches[$branchChoice]}" == "${DCYAN}<----- back ------${NC}" ]
-                then
-                    select_repo
-                else
-                    # prompt user for remote repo action                    
-                    echo "${CYAN}Select action:${NC}"
-                    actions=("fetch" "pull" "${DCYAN}<----- back ------${NC}")
-                    select_option "${actions[@]}"
-                    actionsChoice=$?
-                    # format repo and branch names for git shell command
-                    repoBranchStr="${branches[$branchChoice]}"
-                    repoBranch=("${repoBranchStr//// }")
-                        # remote repo action control flow
-                        if [ "$actionsChoice" -eq 0 ]
-                            then
-                                echo
-                                git fetch $repoBranch
-                            elif [ "$actionsChoice" -eq 1 ]
-                                then
-                                    echo
-                                    git pull $repoBranch
-                            else
-                                select_branch
-                            fi
-                fi
+            select_repo
+        elif [ "$choice" -eq 0 ] && [ "${branches[$branchChoice]}" == "${YELLOW}*** new branch ***${NC}" ]
+            then
+                read -p "Insert new branch name (cannot contain spaces): " branchName
+                echo
+                git checkout -b "$branchName"
+        elif [ "$choice" -eq 0 ] # handles local repo
+            then
+                echo
+                git checkout ${branches[$branchChoice]}
+        else # handles remote repos
+            repoBranchStr="${branches[$branchChoice]}"
+            formatted="${repoBranchStr//// }"
+            repoBranchArr=($formatted)
+            desiredBranch="${repoBranchArr[@]:1}"
+
+            echo
+            git fetch ${repos[$choice]}
+            git switch $desiredBranch
         fi
 }
 
