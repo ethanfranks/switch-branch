@@ -1,8 +1,7 @@
 #!/bin/sh
 
-remotesStr=`git remote -v`
-strArr=($remotesStr)
-declare -a repos=(local)
+strArr=(`git remote -v`)
+repos=(local)
 
 for i in "${!strArr[@]}"
 	do
@@ -13,7 +12,7 @@ for i in "${!strArr[@]}"
 		fi
 	done
 
-declare -a branches=()
+branches=()
 
 select_repo() {
     branches=()
@@ -63,7 +62,7 @@ select_branch() {
                     select_repo
                 else
                     echo "\nSelect action:"
-                    declare -a actions=("fetch" "pull" "<----- back ------")
+                    actions=("fetch" "pull" "<----- back ------")
                     source ./select_option.sh 
                     select_option "${actions[@]}"
                     actionsChoice=$?
