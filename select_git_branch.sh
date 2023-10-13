@@ -67,12 +67,15 @@ select_branch() {
                     select_option "${actions[@]}"
                     actionsChoice=$?
 
+                    repoBranchStr="${branches[$branchChoice]}"
+                    repoBranch=("${repoBranchStr//// }")
+                    
                         if [ "$actionsChoice" -eq 0 ]
                             then
-                                git fetch ${branches[$branchChoice]}
+                                git fetch $repoBranch
                             elif [ "$actionsChoice" -eq 1 ]
                                 then
-                                    git pull ${branches[$branchChoice]}
+                                    git pull $repoBranch
                             else
                                 select_branch
                             fi
