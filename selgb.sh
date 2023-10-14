@@ -13,7 +13,7 @@ function select_option {
     cursor_blink_off() { printf "$ESC[?25l"; }
     cursor_to()        { printf "$ESC[$1;${2:-1}H"; }
     print_option()     { printf "   $1 "; }
-    print_selected()   { printf "  $ESC[7m $1 $ESC[27m"; }
+    print_selected()   { printf "  $ESC[1m $1 $ESC[22m"; }
     get_cursor_row()   { IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
     key_input()        { read -s -n3 key 2>/dev/null >&2
                          if [[ $key = $ESC[A ]]; then echo up;    fi
@@ -67,13 +67,33 @@ function select_option {
 
 # color constants for echo output
 CYAN='\033[0;36m'
-YELLOW='\033[1;33m'
 DCYAN='\033[38;5;24m'
+MAGENTA='\033[0;35m'
+GOLD='\033[38;5;178m'
 NC='\033[0m'
 
+show_current_branch() {
+    branchesStr=`git branch`
+    # replace * with 1 to use as key for finding current branch
+    formatted="${branchesStr//\*/1}"
+    localBranches=($formatted)
+    for i in "${!localBranches[@]}"
+        do
+            var="${localBranches[$i]}"
+            if [ $var == 1 ]
+                then
+                    currentBranch=${localBranches[`expr $i + 1`]}
+                fi
+        done
+
+    echo "${MAGENTA}Curent branch: $currentBranch${NC}"
+}
+show_current_branch
+
+repos=(local)
+get_remotes() {
 # loop through remotes and add any with fetch permission to array
 strArr=(`git remote -v`)
-repos=(local)
 for i in "${!strArr[@]}"
 	do
 		var=${strArr[`expr $i + 2`]}
@@ -82,12 +102,14 @@ for i in "${!strArr[@]}"
 			repos+=(${strArr[$i]})
 		fi
 	done
+}
+get_remotes
 
-# initialize globally available branches array
+# initialize global branches array
 branches=()
 select_repo() {
     # empty the branches array upon each call
-    # necessary for proper "back" selection functionality
+    # necessary for "back" functionality
     branches=()
 
     # prompt user for repo choice
@@ -100,7 +122,7 @@ select_repo() {
     	then
             branchStr="`git branch`"
             parsedBranchStr="${branchStr//\*/ }"
-    		branches+=($parsedBranchStr "${YELLOW}*** new branch ***${NC}")
+    		branches+=($parsedBranchStr "${GOLD}*** new branch ***${NC}")
     	# if user selects a remote repo add remote branches to branches array
         else
             branchStr="`git branch --remote --list ${repos[$choice]}/*`"
@@ -122,7 +144,7 @@ select_branch() {
     if [ "${branches[$branchChoice]}" == "${DCYAN}<----- back ------${NC}" ]
         then
             select_repo
-        elif [ "$choice" -eq 0 ] && [ "${branches[$branchChoice]}" == "${YELLOW}*** new branch ***${NC}" ]
+        elif [ "$choice" -eq 0 ] && [ "${branches[$branchChoice]}" == "${GOLD}*** new branch ***${NC}" ]
             then
                 read -p "Insert new branch name (cannot contain spaces): " branchName
                 echo
