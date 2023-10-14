@@ -13,7 +13,7 @@ function select_option {
     cursor_blink_off() { printf "$ESC[?25l"; }
     cursor_to()        { printf "$ESC[$1;${2:-1}H"; }
     print_option()     { printf "   $1 "; }
-    print_selected()   { printf "  $ESC[1m $1 $ESC[22m"; }
+    print_selected()   { printf "  $ESC[2m$ESC[1m $1 $ESC[22m"; }
     get_cursor_row()   { IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
     key_input()        { read -s -n3 key 2>/dev/null >&2
                          if [[ $key = $ESC[A ]]; then echo up;    fi
@@ -62,7 +62,7 @@ function select_option {
     return $selected
 }
 
-# -------------- select git branch code --------------
+# ------------- switch git branch script -------------
 # Author: Ethan Franks, https://github.com/ethanfranks
 
 # color constants for echo output
@@ -71,6 +71,15 @@ DCYAN='\033[38;5;24m'
 MAGENTA='\033[0;35m'
 GOLD='\033[38;5;178m'
 NC='\033[0m'
+
+echo " ____ _  _ __ ____ ___ _  _ "
+echo "/ ___/ )( (  (_  _/ __/ )( \\"
+echo "\___ \ /\ /)(  )(( (__) __ ("
+echo "(____(_/\_(__)(__)\___\_)(_/"
+echo " ____ ____  __  __ _  ___ _  _ "
+echo "(  _ (  _ \/ _\(  ( \/ __/ )( \\"
+echo " ) _ ()   /    /    ( (__) __ ("
+echo "(____(__\_\_/\_\_)__)\___\_)(_/\n"
 
 show_current_branch() {
     branchesStr=`git branch`
