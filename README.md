@@ -14,7 +14,7 @@ of branches using arrow keys and switch to it with the enter key.
    - ex:
 
       ```text
-      SWIB=~/.local/switch-branch/swib
+      SWIB=~/.local/switch-branch
       PATH=$SWIB:$PATH
       ```
 
