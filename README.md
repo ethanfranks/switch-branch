@@ -1,5 +1,11 @@
 # Switch Branch
 
+![Screenshot 2023-12-21 at 4 01 48 PM](https://github.com/ethanfranks/switch-branch/assets/100048121/cf6325d0-49dc-4ba5-b335-1a8b78f7c5ab)
+
+![Screenshot 2023-12-21 at 4 02 29 PM](https://github.com/ethanfranks/switch-branch/assets/100048121/b44bff20-215f-456e-92d3-08cdbdf35873)
+
+https://github.com/ethanfranks/switch-branch/assets/100048121/fb4483bc-20d0-42d9-b4ad-50d6cfc8047a
+
 ## Description
 
 A shell script that allows you to select a git branch from a list
