@@ -16,7 +16,7 @@ This project challenged me to work in a new syntax, expand my knowledge of the G
 
 Big thank you to Alexander Klimetschek for his wizardry creating the script that allows the arrow key functionality. I initially set out to write this myself and quickly learned it is quite a challenging feature to implement in the shell.
 
-Check out Alexander's work here: https://lnkd.in/gjA8QTNc
+Check out Alexander's work here: https://unix.stackexchange.com/a/415155
 
 ## Installation
 
