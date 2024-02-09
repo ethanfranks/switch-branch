@@ -8,8 +8,15 @@ https://github.com/ethanfranks/switch-branch/assets/100048121/fb4483bc-20d0-42d9
 
 ## Description
 
-A shell script that allows you to select a git branch from a list
-of branches using arrow keys and switch to it with the enter key.
+Anyone else intimidated by shell scripting? I understand the feeling. To overcome my (irrational) fear of shell scripting I created this little script that allows the user to select a git branch to checkout from a list in their terminal using up and down arrow keys.
+
+First, the user selects the location of the branch they want to checkout from a list of local and remote repositories. Then they can see a list of branches in the selected repo, select the branch they're interested in, go back, or create a new branch locally.
+
+This project challenged me to work in a new syntax, expand my knowledge of the Git CLI, learn to add custom scripts to a bash/zsh profile and experiment with ASCII art.
+
+Big thank you to Alexander Klimetschek for his wizardry creating the script that allows the arrow key functionality. I initially set out to write this myself and quickly learned it is quite a challenging feature to implement in the shell.
+
+Check out Alexander's work here: https://lnkd.in/gjA8QTNc
 
 ## Installation
 
@@ -42,7 +49,7 @@ swib
 
 - At any point press (***ctrl*** + ***c***) to exit `swib` without switching branches.
 
-### Git Commands
+### Git Commands (Under the Hood)
 
 If you are:
 
